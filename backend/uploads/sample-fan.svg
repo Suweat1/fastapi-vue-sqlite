@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#g)"/>
+  <circle cx="400" cy="280" r="120" fill="#fff7ed"/>
+  <path d="M400 180 C445 200, 450 255, 420 280 C390 305, 335 300, 320 250 C300 195, 355 160, 400 180Z" fill="#fdba74"/>
+  <path d="M400 180 C355 200, 350 255, 380 280 C410 305, 465 300, 480 250 C500 195, 445 160, 400 180Z" fill="#fb923c"/>
+  <text x="400" y="520" font-size="50" text-anchor="middle" fill="#fff7ed" font-family="Arial">COOL FAN</text>
+</svg>
