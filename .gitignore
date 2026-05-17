@@ -10,3 +10,7 @@ backend/uploads/*.tmp
 backend/.env
 frontend/*.log
 backend/*.log
+
+.DS_Store
+.excalidraw
+CLAUDE.md

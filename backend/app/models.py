@@ -4,13 +4,9 @@ from datetime import datetime
 from decimal import Decimal
 
 from sqlalchemy import Boolean, CheckConstraint, DateTime, Enum, ForeignKey, Integer, Numeric, String, Text, UniqueConstraint, func
-from sqlalchemy.dialects.mysql import INTEGER as MySQLInteger
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .database import Base
-
-
-MYSQL_UNSIGNED_INT = Integer().with_variant(MySQLInteger(unsigned=True), "mysql")
 
 
 class TimestampMixin:
@@ -91,7 +87,7 @@ class ItemView(Base, TimestampMixin):
     __table_args__ = (UniqueConstraint("item_id", "viewer_key", name="uq_item_view_item_viewer"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    item_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("items.id", ondelete="CASCADE"), nullable=False, index=True)
+    item_id: Mapped[int] = mapped_column(Integer, ForeignKey("items.id", ondelete="CASCADE"), nullable=False, index=True)
     viewer_key: Mapped[str] = mapped_column(String(128), nullable=False)
 
     item: Mapped["Item"] = relationship(back_populates="view_logs")
@@ -101,10 +97,10 @@ class PurchaseOrder(Base, TimestampMixin):
     __tablename__ = "purchase_orders"
     __table_args__ = (UniqueConstraint("item_id", name="uq_purchase_orders_item"),)
 
-    id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, primary_key=True)
-    item_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("items.id", ondelete="CASCADE"), nullable=False, index=True)
-    buyer_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    seller_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    item_id: Mapped[int] = mapped_column(Integer, ForeignKey("items.id", ondelete="CASCADE"), nullable=False, index=True)
+    buyer_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    seller_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     amount: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="completed")
 
@@ -117,10 +113,10 @@ class Conversation(Base, TimestampMixin):
     __tablename__ = "conversations"
     __table_args__ = (UniqueConstraint("item_id", "buyer_id", "seller_id", name="uq_conversations_triplet"),)
 
-    id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, primary_key=True)
-    item_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("items.id", ondelete="CASCADE"), nullable=False, index=True)
-    buyer_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    seller_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    item_id: Mapped[int] = mapped_column(Integer, ForeignKey("items.id", ondelete="CASCADE"), nullable=False, index=True)
+    buyer_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    seller_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     last_message_preview: Mapped[str] = mapped_column(String(255), nullable=False, default="")
     last_message_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     unread_buyer_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
@@ -137,11 +133,11 @@ class Conversation(Base, TimestampMixin):
 class ChatMessage(Base, TimestampMixin):
     __tablename__ = "chat_messages"
 
-    id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
     conversation_id: Mapped[int] = mapped_column(
-        MYSQL_UNSIGNED_INT, ForeignKey("conversations.id", ondelete="CASCADE"), nullable=False, index=True
+        Integer, ForeignKey("conversations.id", ondelete="CASCADE"), nullable=False, index=True
     )
-    sender_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    sender_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     content: Mapped[str] = mapped_column(Text, nullable=False)
 
     conversation: Mapped["Conversation"] = relationship(back_populates="messages")
@@ -151,20 +147,20 @@ class ChatMessage(Base, TimestampMixin):
 class Notification(Base, TimestampMixin):
     __tablename__ = "notifications"
 
-    id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, primary_key=True)
-    user_id: Mapped[int] = mapped_column(MYSQL_UNSIGNED_INT, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     kind: Mapped[str] = mapped_column(String(30), nullable=False)
     title: Mapped[str] = mapped_column(String(120), nullable=False)
     content: Mapped[str] = mapped_column(String(255), nullable=False)
     is_read: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     item_id: Mapped[int | None] = mapped_column(
-        MYSQL_UNSIGNED_INT, ForeignKey("items.id", ondelete="SET NULL"), nullable=True, index=True
+        Integer, ForeignKey("items.id", ondelete="SET NULL"), nullable=True, index=True
     )
     order_id: Mapped[int | None] = mapped_column(
-        MYSQL_UNSIGNED_INT, ForeignKey("purchase_orders.id", ondelete="SET NULL"), nullable=True, index=True
+        Integer, ForeignKey("purchase_orders.id", ondelete="SET NULL"), nullable=True, index=True
     )
     conversation_id: Mapped[int | None] = mapped_column(
-        MYSQL_UNSIGNED_INT, ForeignKey("conversations.id", ondelete="SET NULL"), nullable=True, index=True
+        Integer, ForeignKey("conversations.id", ondelete="SET NULL"), nullable=True, index=True
     )
 
     user: Mapped["User"] = relationship(foreign_keys=[user_id])
