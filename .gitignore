@@ -12,5 +12,5 @@ frontend/*.log
 backend/*.log
 
 .DS_Store
-.excalidraw
+*.*.excalidraw
 CLAUDE.md
