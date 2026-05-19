@@ -1,5 +1,10 @@
 # 校园二手交易平台项目文档
-
+![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571.svg?style=for-the-badge&logo=fastapi)
+![Anaconda](https://img.shields.io/badge/Anaconda-%2344A833.svg?style=for-the-badge&logo=anaconda&logoColor=white)
+![Vue.js](https://img.shields.io/badge/vue.js-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F.svg?style=for-the-badge&logo=node.js&logoColor=white)
+![Pydantic](https://img.shields.io/badge/pydantic-%23E92063.svg?style=for-the-badge&logo=pydantic&logoColor=white)
 ## 1. 项目概述
 
 校园二手交易平台是一个面向高校场景的全栈 Web 应用，主要用于解决校园内教材、生活用品、电子产品等闲置物品流转不畅的问题。系统以 `FastAPI + SQLAlchemy + Vue 3 + Vite + SQLite3` 为技术基础，围绕“发布、浏览、筛选、收藏、购买、私聊、通知、管理”八个核心环节构建完整业务闭环。
