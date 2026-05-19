@@ -18,13 +18,13 @@
 
 ### 3.1 总体架构
 
-系统采用典型的 B/S 架构，前端负责页面展示、交互处理和状态维护，后端负责业务逻辑、权限控制和数据库访问，MySQL 负责持久化存储。部分高频交互采用 WebSocket 实现实时推送。
+系统采用典型的 B/S 架构，前端负责页面展示、交互处理和状态维护，后端负责业务逻辑、权限控制和数据库访问，SQLite 负责持久化存储。部分高频交互采用 WebSocket 实现实时推送。
 
 ```mermaid
 flowchart LR
     A[Vue 3 前端] -->|HTTP / REST API| B[FastAPI 后端]
     A -->|WebSocket 实时消息| C[实时推送服务]
-    B <--> D[(MySQL 数据库)]
+    B <--> D[(SQLite 数据库)]
     B --> E[/uploads 静态文件目录/]
     C <--> D
 ```
@@ -33,7 +33,6 @@ flowchart LR
 
 - `FastAPI`：提供高性能 REST 接口，适合快速构建课程项目后端。
 - `SQLAlchemy`：负责 ORM 映射、查询构建、事务管理和关联关系处理。
-- `PyMySQL`：连接 MySQL 数据库。
 - `JWT`：实现登录鉴权和角色权限控制。
 - `WebSocket`：实现私聊消息与通知的实时更新。
 - `StreamingResponse`：用于导出平台统计报表 ZIP 文件。
@@ -153,7 +152,7 @@ flowchart LR
 
 | 文件 | 作用 | 何时修改 |
 |---|---|---|
-| `backend/mysql_init.sql` | MySQL 手工初始化脚本 | 改表结构、改字段、改初始数据时必须同步修改 |
+| `backend/sqlite_init.sql` | SQLite 手工初始化脚本 | 改表结构、改字段、改初始数据时必须同步修改 |
 | `backend/app/models.py` | SQLAlchemy ORM 模型 | 改运行时数据库模型时优先修改这里 |
 | `backend/scripts/init_db.py` | ORM 自动建表脚本 | 如果要用 Python 方式自动建表，可在这里扩展初始化流程 |
 | `backend/scripts/seed_data.py` | 示例数据脚本 | 调整默认账号、商品样例、收藏数据时修改这里 |
@@ -161,9 +160,9 @@ flowchart LR
 补充说明：
 
 - 如果你只是修改数据库连接信息，例如账号、密码、主机、端口、库名，修改 `backend/.env` 和 `backend/.env.example` 即可，`backend/app/config.py` 会自动读取。
-- 如果你修改了表字段、主键、外键或唯一约束，必须同时检查 `backend/app/models.py` 和 `backend/mysql_init.sql`，否则会出现“模型和数据库结构不一致”的问题。
+- 如果你修改了表字段、主键、外键或唯一约束，必须同时检查 `backend/app/models.py` 和 `backend/sqlite_init.sql`，否则会出现“模型和数据库结构不一致”的问题。
 - 如果你增加了示例数据或调整默认测试账号，通常还需要同步修改 `backend/scripts/seed_data.py`。
-- 当前项目只有一个手写 SQL 文件，即 `backend/mysql_init.sql`；如果需要重新导入数据库，优先使用它。
+- 当前项目只有一个手写 SQL 文件，即 `backend/sqlite_init.sql`；如果需要重新导入数据库，优先使用它。
 
 ## 7. 后端接口设计
 
@@ -321,7 +320,7 @@ D:\javaweb
 │  │  ├─reporting.py
 │  │  ├─schemas.py
 │  │  └─security.py
-│  ├─mysql_init.sql
+│  ├─sqlite_init.sql
 │  ├─requirements.txt
 │  ├─install_deps.bat
 │  ├─start_backend.bat
@@ -344,14 +343,14 @@ D:\javaweb
 
 - Python 3.11 及以上
 - Node.js 18 及以上
-- MySQL 8.0 及以上
+- SQLite 3 及以上
 
 ## 12. 系统运行步骤
 
 ### 12.1 数据库初始化
 1. 修改backend\.env中的数据库账号密码。
-2. 登录 MySQL或Navicat。
-2. 执行 `backend/mysql_init.sql`。
+2. 登录 SQLite或Navicat。
+2. 执行 `backend/sqlite_init.sql`。
 3. 确认数据库 `campus_market` 已创建，表结构和示例数据已导入。
 
 ### 12.2 后端启动
